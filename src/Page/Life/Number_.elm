@@ -1,4 +1,4 @@
-module Page.Life exposing (Data, Model, Msg, page)
+module Page.Life.Number_ exposing (Data, Model, Msg, page)
 
 import Browser.Navigation
 import DataSource exposing (DataSource)
@@ -20,8 +20,7 @@ import View exposing (View)
 
 
 type alias Model =
-    { slideDict : Result (List DeadEnd) (Dict Int Slide)
-    , currentSlide : Int
+    { slideDict : Result (List DeadEnd) (Dict String Slide)
     }
 
 
@@ -30,7 +29,7 @@ type alias Msg =
 
 
 type alias RouteParams =
-    {}
+    { number : String }
 
 
 
@@ -40,9 +39,10 @@ type alias RouteParams =
 
 page : PageWithState RouteParams Data Model Msg
 page =
-    Page.single
+    Page.prerender
         { head = head
-        , data = data
+        , data = (\a -> data)
+        , routes = routes
         }
         |> Page.buildWithLocalState
             { view = view
@@ -53,6 +53,20 @@ page =
                     Sub.none
             }
 
+routesHelper : Data -> List RouteParams
+routesHelper d =
+            case d of
+                Err a ->
+                    []
+
+                Ok list ->
+                         List.indexedMap (\a b -> RouteParams <| String.fromInt a) list
+routes : DataSource (List RouteParams)
+routes =
+    DataSource.map routesHelper data
+        -- (\d ->
+        -- )
+
 
 init :
     Maybe PageUrl
@@ -62,10 +76,10 @@ init :
 init url sharedModel static =
     case static.data of
         Err a ->
-            ( Model (Err a) 0, Cmd.none )
+            ( Model (Err a) , Cmd.none )
 
         Ok a ->
-            ( Model (Ok (indexedMap (\x y -> ( x, y )) a |> Dict.fromList)) 0, Cmd.none )
+            ( Model (Ok (indexedMap (\x y -> ( String.fromInt x, y )) a |> Dict.fromList)) , Cmd.none )
 
 
 update :
@@ -119,7 +133,7 @@ view :
     -> View Msg
 view maybeUrl sharedModel model static =
     { title = "Thanawat's website"
-    , body = [ el [centerX, Font.size 40, Font.variant Font.smallCaps] (text "life"), renderSlides model ]
+    , body = [ el [ centerX, Font.size 40, Font.variant Font.smallCaps ] (text "life"), renderSlides model static.routeParams ]
     }
 
 
@@ -127,11 +141,11 @@ view maybeUrl sharedModel model static =
 -- TODO figure out a way to render the "slides"
 
 
-renderSlides : Model -> Element.Element msg
-renderSlides d =
+renderSlides : Model -> RouteParams -> Element.Element msg
+renderSlides d params =
     case d.slideDict of
         Ok a ->
-            renderSlide <| Dict.get d.currentSlide a
+            renderSlide <| Dict.get params.number a
 
         Err err ->
             Element.text <| Debug.toString err
@@ -149,4 +163,4 @@ renderSlide slide =
 
 singleSlide : Slide -> Element msg
 singleSlide s =
-    row [ centerX, centerY ] [ paragraph [ width (fillPortion 1)] [(text s.text)], el [ width (fillPortion 1), centerX] (text s.image) ]
+    row [ centerX, centerY ] [ paragraph [ width (fillPortion 1) ] [ text s.text ], el [ width (fillPortion 1), centerX, Font.center ] (text s.image) ]
