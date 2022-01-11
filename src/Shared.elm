@@ -1,17 +1,17 @@
-module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template, color)
+module Shared exposing (Data, Model, Msg(..), SharedMsg(..), color, template)
 
 import Browser.Navigation
 import DataSource
+import Element exposing (fill, height, rgb255, spacing, width)
+import Element.Background
+import Element.Font as Font
 import Html exposing (Html)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
 import Route exposing (Route)
 import SharedTemplate exposing (SharedTemplate)
-import Element exposing (width, fill, height)
 import View exposing (View)
-import Element exposing (spacing, rgb255)
-import Element.Background
 
 
 template : SharedTemplate Msg Model Data msg
@@ -86,7 +86,11 @@ data : DataSource.DataSource Data
 data =
     DataSource.succeed ()
 
+
+
 -- TODO render the homepage separately
+
+
 view :
     Data
     ->
@@ -98,13 +102,29 @@ view :
     -> View msg
     -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
-    { body = Element.layout [] <| Element.column [width fill, height fill, spacing 30, Element.Background.color color.nordBackground] pageView.body
+    { body =
+        Element.layout [] <|
+            Element.column
+                [ width fill
+                , height fill
+                , spacing 30
+                , Element.padding 20
+                , Element.Background.color color.nordBackground
+                , Font.color color.white
+                , Font.family
+                    [ Font.typeface "Fira Mono"
+                    , Font.monospace
+                    ]
+                ]
+                pageView.body
     , title = pageView.title
     }
+
+
 color =
-    { yellow = rgb255  0xEB 0xCB 0x8B
+    { yellow = rgb255 0xEB 0xCB 0x8B
     , orange = rgb255 0xD0 0x87 0x70
-    , nordBackground = rgb255 0x2e 0x34 0x40
+    , nordBackground = rgb255 0x2E 0x34 0x40
     , lightGrey = rgb255 0x43 0x4C 0x5E
     , white = rgb255 0xEC 0xEF 0xF4
     }

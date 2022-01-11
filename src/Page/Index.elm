@@ -146,13 +146,9 @@ aboutGroup =
         [ centerX
         , centerY
         , spacing 30
-        , Font.family
-            [ Font.typeface "Fira Mono"
-            , Font.monospace
-            ]
         ]
-        [ Element.el [ Font.size 30, Font.color Shared.color.white, centerX, centerY ] <| Element.text "Hi, I'm Thanawat!"
-        , Element.el [ Font.size 20, Font.color Shared.color.white, centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
+        [ Element.el [ Font.size 30,  centerX, centerY ] <| Element.text "Hi, I'm Thanawat!"
+        , Element.el [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
         ]
 
 

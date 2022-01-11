@@ -1,22 +1,28 @@
 module Page.Life exposing (Data, Model, Msg, page)
 
+import Browser.Navigation
 import DataSource exposing (DataSource)
 import DataSource.File
-import Element
+import Dict exposing (Dict)
+import Element exposing (..)
+import Element.Font as Font
 import Head
 import Head.Seo as Seo
+import List exposing (indexedMap)
 import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Parser exposing (DeadEnd, run)
-import Shared
+import Shared exposing (color)
 import Slide exposing (..)
 import Svg.Attributes exposing (offset)
 import View exposing (View)
 
 
 type alias Model =
-    ()
+    { slideDict : Result (List DeadEnd) (Dict Int Slide)
+    , currentSlide : Int
+    }
 
 
 type alias Msg =
@@ -27,13 +33,53 @@ type alias RouteParams =
     {}
 
 
-page : Page RouteParams Data
+
+-- TODO figure out how to model the slide state(maybe using a dictionary of numbers)
+-- Also get the slide number from the URL
+
+
+page : PageWithState RouteParams Data Model Msg
 page =
     Page.single
         { head = head
         , data = data
         }
-        |> Page.buildNoState { view = view }
+        |> Page.buildWithLocalState
+            { view = view
+            , init = init
+            , update = update
+            , subscriptions =
+                \maybePageUrl routeParams path model ->
+                    Sub.none
+            }
+
+
+init :
+    Maybe PageUrl
+    -> Shared.Model
+    -> StaticPayload Data RouteParams
+    -> ( Model, Cmd Msg )
+init url sharedModel static =
+    case static.data of
+        Err a ->
+            ( Model (Err a) 0, Cmd.none )
+
+        Ok a ->
+            ( Model (Ok (indexedMap (\x y -> ( x, y )) a |> Dict.fromList)) 0, Cmd.none )
+
+
+update :
+    PageUrl
+    -> Maybe Browser.Navigation.Key
+    -> Shared.Model
+    -> StaticPayload Data RouteParams
+    -> Msg
+    -> Model
+    -> ( Model, Cmd Msg )
+update _ maybeNavigationKey sharedModel static msg model =
+    case msg of
+        _ ->
+            ( model, Cmd.none )
 
 
 type alias Data =
@@ -68,19 +114,39 @@ head static =
 view :
     Maybe PageUrl
     -> Shared.Model
+    -> Model
     -> StaticPayload Data RouteParams
     -> View Msg
-view maybeUrl sharedModel static =
+view maybeUrl sharedModel model static =
     { title = "Thanawat's website"
-    , body = [ renderSlides static.data]
+    , body = [ el [centerX, Font.size 40, Font.variant Font.smallCaps] (text "life"), renderSlides model ]
     }
 
+
+
 -- TODO figure out a way to render the "slides"
-renderSlides : Data -> Element.Element msg
+
+
+renderSlides : Model -> Element.Element msg
 renderSlides d =
-    case d of
+    case d.slideDict of
         Ok a ->
-            Element.text <| Debug.toString a
+            renderSlide <| Dict.get d.currentSlide a
 
         Err err ->
             Element.text <| Debug.toString err
+
+
+renderSlide : Maybe Slide -> Element msg
+renderSlide slide =
+    case slide of
+        Just s ->
+            singleSlide s
+
+        Nothing ->
+            Element.text "Slide not found"
+
+
+singleSlide : Slide -> Element msg
+singleSlide s =
+    row [ centerX, centerY ] [ paragraph [ width (fillPortion 1)] [(text s.text)], el [ width (fillPortion 1), centerX] (text s.image) ]
