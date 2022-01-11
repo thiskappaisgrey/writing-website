@@ -18,5 +18,8 @@ map fn doc =
     { title = doc.title
     , body =  List.map (Element.map fn) doc.body
     }
-
-
+placeholder : String -> View msg
+placeholder moduleName =
+    { title = "Placeholder"
+    , body = [ Element.text moduleName ]
+    }

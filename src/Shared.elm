@@ -98,7 +98,7 @@ view :
     -> View msg
     -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
-    { body = Element.layout [] <| Element.column [width fill, height fill, spacing 20, Element.Background.color color.nordBackground] pageView.body
+    { body = Element.layout [] <| Element.column [width fill, height fill, spacing 30, Element.Background.color color.nordBackground] pageView.body
     , title = pageView.title
     }
 color =
@@ -106,5 +106,5 @@ color =
     , orange = rgb255 0xD0 0x87 0x70
     , nordBackground = rgb255 0x2e 0x34 0x40
     , lightGrey = rgb255 0x43 0x4C 0x5E
-    , white = rgb255 0xFF 0xFF 0xFF
+    , white = rgb255 0xEC 0xEF 0xF4
     }

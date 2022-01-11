@@ -1,0 +1,7 @@
+* Inbox
+** TODO Finish up puzzle. Add animations to puzzle too.
+- https://korban.net/elm/elm-ui-patterns/element-adjustment
+[[file:~/code/winter-2022/wrt-107t/writing-website/src/Page/Index.elm::\]]]
+** TODO Add content to pages (using markdown)
+** TODO Design(using a simple design) pages to make them look nice
+** TODO Add page transitions(not important but it shouldn't be too too hard?)
