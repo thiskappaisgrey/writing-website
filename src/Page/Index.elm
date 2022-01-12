@@ -20,6 +20,8 @@ import Svg as Svg exposing (svg)
 import Svg.Attributes as SvgAttributes
 import Time
 import View exposing (View)
+import Element exposing (mouseOver)
+import Element exposing (alpha)
 
 
 type ButtonState
@@ -137,7 +139,7 @@ view :
     -> View Msg
 view maybeUrl sharedModel model static =
     { title = "Thanawat's website"
-    , body = [ circle, aboutGroup, puzzleButton ]
+    , body = [ circle, aboutGroup, puzzleGroup ]
     }
 
 
@@ -152,21 +154,29 @@ aboutGroup =
         ]
 
 
+circle : Element msg
+circle =
+    el [ width <| px 200, height <| px 200, Border.rounded 100, Border.width 3, centerY, centerX ] none
 
 -- Puzzle Pieces:
 -- Defines SVG puzzle pieces starting from top left to top right
-
+puzzleGroup = row [centerX, centerY, width fill] [
+                    -- puzzleButton
+                     puzzleButton1
+                   ]
 -- Maybe I can write it as a function to avoid duplication
 puzzleButton =
     Element.link
         [ Element.focused
             []
-        , centerX
-        , centerY
+        , Element.moveLeft 199
+        , Element.below puzzleButton2
+        
+        -- , Element.behindContent puzzleButton2
         ]
         {
-            url =   "/life"
-            , label =   Element.html puzzleSVGTR
+            url =   "/coding"
+            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|   Element.html puzzleSVGTR
         }
 
 -- Here, I will just duplicate this:
@@ -198,9 +208,214 @@ puzzleSVGTR =
             -- , SvgAttributes.r "50"
             ]
             []
+        -- , Svg.rect
+        --     [ SvgAttributes.x "30"
+        --     , SvgAttributes.y "90"
+        --     , SvgAttributes.width "40"
+        --     , SvgAttributes.height "40"
+        --     , SvgAttributes.rx "20"
+        --     , SvgAttributes.ry "15"
+
+        --     -- , SvgAttributes.r "50"
+        --     ]
+        --     []
+        , Svg.text_
+            [ SvgAttributes.fill "#4C566A"
+            , SvgAttributes.x "15"
+            , SvgAttributes.y "55"
+            , SvgAttributes.fontSize "19"
+            , SvgAttributes.fontFamily "monospace"
+            , SvgAttributes.fontStyle "Fira Mono"
+            ]
+            [ Svg.text "Coding" ]
+        ]
+
+
+
+puzzleButton1 =
+    Element.link
+        [ Element.focused
+            []
+        , Element.moveRight 150
+
+        , Element.inFront puzzleButton
+        , centerX
+
+        ]
+        {
+            url =   "/life"
+            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGTL
+        }
+
+-- Here, I will just duplicate this:
+puzzleSVGTL =
+    svg
+        [ SvgAttributes.width "300"
+        , SvgAttributes.height "300"
+        , SvgAttributes.viewBox "0 0 150 150"
+        , SvgAttributes.fill "#A3BE8C"
+        ]
+        [ Svg.rect
+            [ SvgAttributes.x "0"
+            , SvgAttributes.y "0"
+            , SvgAttributes.width "100"
+            , SvgAttributes.height "100"
+            , SvgAttributes.rx "0"
+            , SvgAttributes.ry "0"
+            ]
+            [
+            ]
+        -- , Svg.rect
+        --     [ SvgAttributes.x "90"
+        --     , SvgAttributes.y "30"
+        --     , SvgAttributes.width "40"
+        --     , SvgAttributes.height "40"
+        --     , SvgAttributes.rx "15"
+        --     , SvgAttributes.ry "20"
+
+        --     -- , SvgAttributes.r "50"
+        --     ]
+        --     []
+        -- --
+        -- , Svg.rect
+        --     [ SvgAttributes.x "30"
+        --     , SvgAttributes.y "90"
+        --     , SvgAttributes.width "40"
+        --     , SvgAttributes.height "40"
+        --     , SvgAttributes.rx "20"
+        --     , SvgAttributes.ry "15"
+
+        --     -- , SvgAttributes.r "50"
+        --     ]
+        --     []
+        , Svg.text_
+            [ SvgAttributes.fill "#4C566A"
+            , SvgAttributes.x "40"
+            , SvgAttributes.y "55"
+            , SvgAttributes.fontSize "19"
+            , SvgAttributes.fontFamily "monospace"
+            , SvgAttributes.fontStyle "Fira Mono"
+            ]
+            [ Svg.text "Life" ]
+
+        ]
+
+puzzleButton2 =
+    Element.link
+        [ Element.focused
+            []
+        , Element.moveUp 160
+
+        , Element.onRight puzzleButton3
+        -- , centerX
+
+        ]
+        {
+            url =   "/stats"
+            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGBL
+        }
+
+-- Here, I will just duplicate this:
+puzzleSVGBL =
+    svg
+        [ SvgAttributes.width "300"
+        , SvgAttributes.height "300"
+        , SvgAttributes.viewBox "0 0 150 150"
+        , SvgAttributes.fill "#D08770"
+        ]
+        [ Svg.rect
+            [ SvgAttributes.x "0"
+            , SvgAttributes.y "30"
+            , SvgAttributes.width "100"
+            , SvgAttributes.height "100"
+            , SvgAttributes.rx "0"
+            , SvgAttributes.ry "0"
+            ]
+            [
+            ]
         , Svg.rect
             [ SvgAttributes.x "30"
-            , SvgAttributes.y "90"
+            , SvgAttributes.y "0"
+            , SvgAttributes.width "40"
+            , SvgAttributes.height "40"
+            , SvgAttributes.rx "20"
+            , SvgAttributes.ry "15"
+
+            -- , SvgAttributes.r "50"
+            ]
+            []
+        --
+        -- , Svg.rect
+        --     [ SvgAttributes.x "30"
+        --     , SvgAttributes.y "90"
+        --     , SvgAttributes.width "40"
+        --     , SvgAttributes.height "40"
+        --     , SvgAttributes.rx "20"
+        --     , SvgAttributes.ry "15"
+
+        --     -- , SvgAttributes.r "50"
+        --     ]
+        --     []
+        , Svg.text_
+            [ SvgAttributes.fill "#4C566A"
+            , SvgAttributes.x "10"
+            , SvgAttributes.y "80"
+            , SvgAttributes.fontSize "19"
+            , SvgAttributes.fontFamily "monospace"
+            , SvgAttributes.fontStyle "Fira Mono"
+            ]
+            [ Svg.text "Stats" ]
+
+        ]
+
+puzzleButton3 =
+    Element.link
+        [ Element.focused
+            []
+        , Element.moveLeft 160
+
+        -- , Element.inFront puzzleButton
+        -- , centerX
+
+        ]
+        {
+            url =   "/hobbies"
+            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGBR
+        }
+
+-- Here, I will just duplicate this:
+puzzleSVGBR =
+    svg
+        [ SvgAttributes.width "300"
+        , SvgAttributes.height "300"
+        , SvgAttributes.viewBox "0 0 150 150"
+        , SvgAttributes.fill "#BF616A"
+        ]
+        [ Svg.rect
+            [ SvgAttributes.x "30"
+            , SvgAttributes.y "30"
+            , SvgAttributes.width "100"
+            , SvgAttributes.height "100"
+            , SvgAttributes.rx "0"
+            , SvgAttributes.ry "0"
+            ]
+            [
+            ]
+        , Svg.rect
+            [ SvgAttributes.x "60"
+            , SvgAttributes.y "0"
+            , SvgAttributes.width "40"
+            , SvgAttributes.height "40"
+            , SvgAttributes.rx "20"
+            , SvgAttributes.ry "15"
+
+            -- , SvgAttributes.r "50"
+            ]
+            []
+        --
+        , Svg.rect
+            [ SvgAttributes.x "0"
+            , SvgAttributes.y "60"
             , SvgAttributes.width "40"
             , SvgAttributes.height "40"
             , SvgAttributes.rx "20"
@@ -211,28 +426,12 @@ puzzleSVGTR =
             []
         , Svg.text_
             [ SvgAttributes.fill "#4C566A"
-            , SvgAttributes.x "30"
-            , SvgAttributes.y "55"
+            , SvgAttributes.x "40"
+            , SvgAttributes.y "80"
             , SvgAttributes.fontSize "19"
             , SvgAttributes.fontFamily "monospace"
             , SvgAttributes.fontStyle "Fira Mono"
             ]
-            [ Svg.text "Life" ]
-        -- Maybe I can dynamically add these when hovered, and also change the height and widht to new ones?
-         -- , Svg.animate
-         --        [
-         --         SvgAttributes.attributeName "width", SvgAttributes.values "300;350", SvgAttributes.dur "1s", SvgAttributes.repeatCount "1"
-         --        ]
-         --        []
-         --      , Svg.animate
-         --        [
-         --         SvgAttributes.attributeName "height", SvgAttributes.values "300;350", SvgAttributes.dur "1s", SvgAttributes.repeatCount "1"
-         --        ]
-         --        []
+            [ Svg.text "Hobbies" ]
 
         ]
-
-
-circle : Element msg
-circle =
-    el [ width <| px 200, height <| px 200, Border.rounded 100, Border.width 3, centerY, centerX ] none
