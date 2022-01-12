@@ -22,6 +22,7 @@ import Time
 import View exposing (View)
 import Element exposing (mouseOver)
 import Element exposing (alpha)
+import Element exposing (moveLeft)
 
 
 type ButtonState
@@ -151,6 +152,8 @@ aboutGroup =
         ]
         [ Element.el [ Font.size 30,  centerX, centerY ] <| Element.text "Hi, I'm Thanawat!"
         , Element.el [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
+        -- , Element. [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
+
         ]
 
 
@@ -160,22 +163,33 @@ circle =
 
 -- Puzzle Pieces:
 -- Defines SVG puzzle pieces starting from top left to top right
-puzzleGroup = row [centerX, centerY, width fill] [
+puzzleGroup =
+    Element.column [centerX, spacing 0, padding 0, Element.moveRight 100]   [
+
+    row [centerX, centerY, spacing 0] [
                     -- puzzleButton
-                     puzzleButton1
+                     puzzleButton
+                    , puzzleButton1
                    ]
+    , row [centerX, centerY, spacing 0] [
+                    -- puzzleButton
+                     puzzleButton2
+                    , puzzleButton3
+                   ]
+        ]
 -- Maybe I can write it as a function to avoid duplication
 puzzleButton =
     Element.link
         [ Element.focused
             []
-        , Element.moveLeft 199
-        , Element.below puzzleButton2
-        
+        -- , Element.moveLeft 199
+        -- , centerX
+        -- , Element.below puzzleButton2
+
         -- , Element.behindContent puzzleButton2
         ]
         {
-            url =   "/coding"
+            url =   "/life"
             , label = Element.el [ mouseOver [ alpha 0.85 ]] <|   Element.html puzzleSVGTR
         }
 
@@ -197,28 +211,6 @@ puzzleSVGTR =
             ]
             [
             ]
-        , Svg.rect
-            [ SvgAttributes.x "90"
-            , SvgAttributes.y "30"
-            , SvgAttributes.width "40"
-            , SvgAttributes.height "40"
-            , SvgAttributes.rx "15"
-            , SvgAttributes.ry "20"
-
-            -- , SvgAttributes.r "50"
-            ]
-            []
-        -- , Svg.rect
-        --     [ SvgAttributes.x "30"
-        --     , SvgAttributes.y "90"
-        --     , SvgAttributes.width "40"
-        --     , SvgAttributes.height "40"
-        --     , SvgAttributes.rx "20"
-        --     , SvgAttributes.ry "15"
-
-        --     -- , SvgAttributes.r "50"
-        --     ]
-        --     []
         , Svg.text_
             [ SvgAttributes.fill "#4C566A"
             , SvgAttributes.x "15"
@@ -227,7 +219,7 @@ puzzleSVGTR =
             , SvgAttributes.fontFamily "monospace"
             , SvgAttributes.fontStyle "Fira Mono"
             ]
-            [ Svg.text "Coding" ]
+            [ Svg.text "Life" ]
         ]
 
 
@@ -236,14 +228,13 @@ puzzleButton1 =
     Element.link
         [ Element.focused
             []
-        , Element.moveRight 150
+        , Element.moveLeft 160
 
-        , Element.inFront puzzleButton
-        , centerX
+        -- , Element.behindContent puzzleButton
 
         ]
         {
-            url =   "/life"
+            url =   "/coding"
             , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGTL
         }
 
@@ -256,7 +247,7 @@ puzzleSVGTL =
         , SvgAttributes.fill "#A3BE8C"
         ]
         [ Svg.rect
-            [ SvgAttributes.x "0"
+            [ SvgAttributes.x "30"
             , SvgAttributes.y "0"
             , SvgAttributes.width "100"
             , SvgAttributes.height "100"
@@ -265,18 +256,18 @@ puzzleSVGTL =
             ]
             [
             ]
-        -- , Svg.rect
-        --     [ SvgAttributes.x "90"
-        --     , SvgAttributes.y "30"
-        --     , SvgAttributes.width "40"
-        --     , SvgAttributes.height "40"
-        --     , SvgAttributes.rx "15"
-        --     , SvgAttributes.ry "20"
+        , Svg.rect
+            [ SvgAttributes.x "0"
+            , SvgAttributes.y "30"
+            , SvgAttributes.width "40"
+            , SvgAttributes.height "40"
+            , SvgAttributes.rx "15"
+            , SvgAttributes.ry "20"
 
-        --     -- , SvgAttributes.r "50"
-        --     ]
-        --     []
-        -- --
+            -- , SvgAttributes.r "50"
+            ]
+            []
+        --
         -- , Svg.rect
         --     [ SvgAttributes.x "30"
         --     , SvgAttributes.y "90"
@@ -290,13 +281,13 @@ puzzleSVGTL =
         --     []
         , Svg.text_
             [ SvgAttributes.fill "#4C566A"
-            , SvgAttributes.x "40"
+            , SvgAttributes.x "45"
             , SvgAttributes.y "55"
             , SvgAttributes.fontSize "19"
             , SvgAttributes.fontFamily "monospace"
             , SvgAttributes.fontStyle "Fira Mono"
             ]
-            [ Svg.text "Life" ]
+            [ Svg.text "Coding" ]
 
         ]
 
@@ -306,7 +297,7 @@ puzzleButton2 =
             []
         , Element.moveUp 160
 
-        , Element.onRight puzzleButton3
+        -- , Element.onRight puzzleButton3
         -- , centerX
 
         ]
@@ -372,6 +363,7 @@ puzzleButton3 =
     Element.link
         [ Element.focused
             []
+        , Element.moveUp 160
         , Element.moveLeft 160
 
         -- , Element.inFront puzzleButton
