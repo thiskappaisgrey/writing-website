@@ -4,7 +4,7 @@ import Animator
 import Browser.Navigation
 import DataSource exposing (DataSource)
 import Dict exposing (Dict)
-import Element exposing (Element, alignRight, centerX, centerY, el, fill, fillPortion, height, none, padding, px, row, spacing, text, width)
+import Element exposing (Element, alignRight, alpha, centerX, centerY, el, fill, fillPortion, height, mouseOver, moveLeft, none, padding, px, row, spacing, text, width)
 import Element.Background as Background exposing (color)
 import Element.Border as Border
 import Element.Font as Font
@@ -20,9 +20,7 @@ import Svg as Svg exposing (svg)
 import Svg.Attributes as SvgAttributes
 import Time
 import View exposing (View)
-import Element exposing (mouseOver)
-import Element exposing (alpha)
-import Element exposing (moveLeft)
+import Element exposing (moveDown)
 
 
 type ButtonState
@@ -140,7 +138,8 @@ view :
     -> View Msg
 view maybeUrl sharedModel model static =
     { title = "Thanawat's website"
-    , body = [ circle, aboutGroup, puzzleGroup ]
+    , body = [  aboutGroup, puzzleGroup ]
+    , isIndex = True
     }
 
 
@@ -150,50 +149,65 @@ aboutGroup =
         , centerY
         , spacing 30
         ]
-        [ Element.el [ Font.size 30,  centerX, centerY ] <| Element.text "Hi, I'm Thanawat!"
-        , Element.el [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
-        -- , Element. [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
+        [ avatar
+         , Element.el [ Font.size 30, centerX, centerY ] <| Element.text "Hi, I'm Thanawat!"
+        , Element.el [ Font.size 20, centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
 
+        -- , Element. [ Font.size 20,  centerX, centerY ] <| Element.text "Learn more about me by clicking one of these puzzle pieces:"
         ]
 
 
-circle : Element msg
-circle =
-    el [ width <| px 200, height <| px 200, Border.rounded 100, Border.width 3, centerY, centerX ] none
+avatar : Element msg
+avatar =
+    Element.image [ centerX, moveDown 100  ]
+        { src = "/images/avatar.png"
+        , description = "My pixel-art avatar"
+        }
+
+
 
 -- Puzzle Pieces:
 -- Defines SVG puzzle pieces starting from top left to top right
-puzzleGroup =
-    Element.column [centerX, spacing 0, padding 0, Element.moveRight 100]   [
 
-    row [centerX, centerY, spacing 0] [
-                    -- puzzleButton
-                     puzzleButton
-                    , puzzleButton1
-                   ]
-    , row [centerX, centerY, spacing 0] [
-                    -- puzzleButton
-                     puzzleButton2
-                    , puzzleButton3
-                   ]
+
+puzzleGroup =
+    Element.column [ centerX, spacing 0, padding 0, Element.moveRight 100 ]
+        [ row [ centerX, centerY, spacing 0 ]
+            [ -- puzzleButton
+              puzzleButton
+            , puzzleButton1
+            ]
+        , row [ centerX, centerY, spacing 0 ]
+            [ -- puzzleButton
+              puzzleButton2
+            , puzzleButton3
+            ]
         ]
+
+
+
 -- Maybe I can write it as a function to avoid duplication
+
+
 puzzleButton =
     Element.link
         [ Element.focused
             []
+
         -- , Element.moveLeft 199
         -- , centerX
         -- , Element.below puzzleButton2
-
         -- , Element.behindContent puzzleButton2
         ]
-        {
-            url =   "/life"
-            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|   Element.html puzzleSVGTR
+        { url = "/life"
+        , label = Element.el [ mouseOver [ alpha 0.85 ] ] <| Element.html puzzleSVGTR
         }
 
+
+
 -- Here, I will just duplicate this:
+
+
 puzzleSVGTR =
     svg
         [ SvgAttributes.width "300"
@@ -209,8 +223,7 @@ puzzleSVGTR =
             , SvgAttributes.rx "0"
             , SvgAttributes.ry "0"
             ]
-            [
-            ]
+            []
         , Svg.text_
             [ SvgAttributes.fill "#4C566A"
             , SvgAttributes.x "15"
@@ -223,7 +236,6 @@ puzzleSVGTR =
         ]
 
 
-
 puzzleButton1 =
     Element.link
         [ Element.focused
@@ -231,14 +243,16 @@ puzzleButton1 =
         , Element.moveLeft 160
 
         -- , Element.behindContent puzzleButton
-
         ]
-        {
-            url =   "/coding"
-            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGTL
+        { url = "/coding"
+        , label = Element.el [ mouseOver [ alpha 0.85 ] ] <| Element.html puzzleSVGTL
         }
 
+
+
 -- Here, I will just duplicate this:
+
+
 puzzleSVGTL =
     svg
         [ SvgAttributes.width "300"
@@ -254,8 +268,7 @@ puzzleSVGTL =
             , SvgAttributes.rx "0"
             , SvgAttributes.ry "0"
             ]
-            [
-            ]
+            []
         , Svg.rect
             [ SvgAttributes.x "0"
             , SvgAttributes.y "30"
@@ -267,6 +280,7 @@ puzzleSVGTL =
             -- , SvgAttributes.r "50"
             ]
             []
+
         --
         -- , Svg.rect
         --     [ SvgAttributes.x "30"
@@ -275,7 +289,6 @@ puzzleSVGTL =
         --     , SvgAttributes.height "40"
         --     , SvgAttributes.rx "20"
         --     , SvgAttributes.ry "15"
-
         --     -- , SvgAttributes.r "50"
         --     ]
         --     []
@@ -288,8 +301,8 @@ puzzleSVGTL =
             , SvgAttributes.fontStyle "Fira Mono"
             ]
             [ Svg.text "Coding" ]
-
         ]
+
 
 puzzleButton2 =
     Element.link
@@ -299,14 +312,16 @@ puzzleButton2 =
 
         -- , Element.onRight puzzleButton3
         -- , centerX
-
         ]
-        {
-            url =   "/stats"
-            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGBL
+        { url = "/stats"
+        , label = Element.el [ mouseOver [ alpha 0.85 ] ] <| Element.html puzzleSVGBL
         }
 
+
+
 -- Here, I will just duplicate this:
+
+
 puzzleSVGBL =
     svg
         [ SvgAttributes.width "300"
@@ -322,8 +337,7 @@ puzzleSVGBL =
             , SvgAttributes.rx "0"
             , SvgAttributes.ry "0"
             ]
-            [
-            ]
+            []
         , Svg.rect
             [ SvgAttributes.x "30"
             , SvgAttributes.y "0"
@@ -335,6 +349,7 @@ puzzleSVGBL =
             -- , SvgAttributes.r "50"
             ]
             []
+
         --
         -- , Svg.rect
         --     [ SvgAttributes.x "30"
@@ -343,7 +358,6 @@ puzzleSVGBL =
         --     , SvgAttributes.height "40"
         --     , SvgAttributes.rx "20"
         --     , SvgAttributes.ry "15"
-
         --     -- , SvgAttributes.r "50"
         --     ]
         --     []
@@ -356,8 +370,8 @@ puzzleSVGBL =
             , SvgAttributes.fontStyle "Fira Mono"
             ]
             [ Svg.text "Stats" ]
-
         ]
+
 
 puzzleButton3 =
     Element.link
@@ -368,14 +382,16 @@ puzzleButton3 =
 
         -- , Element.inFront puzzleButton
         -- , centerX
-
         ]
-        {
-            url =   "/hobbies"
-            , label = Element.el [ mouseOver [ alpha 0.85 ]] <|  Element.html puzzleSVGBR
+        { url = "/hobbies"
+        , label = Element.el [ mouseOver [ alpha 0.85 ] ] <| Element.html puzzleSVGBR
         }
 
+
+
 -- Here, I will just duplicate this:
+
+
 puzzleSVGBR =
     svg
         [ SvgAttributes.width "300"
@@ -391,8 +407,7 @@ puzzleSVGBR =
             , SvgAttributes.rx "0"
             , SvgAttributes.ry "0"
             ]
-            [
-            ]
+            []
         , Svg.rect
             [ SvgAttributes.x "60"
             , SvgAttributes.y "0"
@@ -404,6 +419,7 @@ puzzleSVGBR =
             -- , SvgAttributes.r "50"
             ]
             []
+
         --
         , Svg.rect
             [ SvgAttributes.x "0"
@@ -425,5 +441,4 @@ puzzleSVGBR =
             , SvgAttributes.fontStyle "Fira Mono"
             ]
             [ Svg.text "Hobbies" ]
-
         ]

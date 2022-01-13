@@ -108,7 +108,7 @@ view sharedData page model toMsg pageView =
                 [ width fill
                 , height fill
                 , spacing 30
-                , Element.padding 20
+                , Element.padding 30
                 , Element.Background.color color.nordBackground
                 , Font.color color.white
                 , Font.family
@@ -116,11 +116,15 @@ view sharedData page model toMsg pageView =
                     , Font.monospace
                     ]
                 ]
-                pageView.body
+                ((navBar (not pageView.isIndex)) :: pageView.body)
     , title = pageView.title
     }
 
-
+navBar : Bool -> Element.Element msg
+navBar showNav = if showNav then
+                     Element.row [] [ Element.link [ Font.size 30 ] { url = "/", label = Element.text "Thanawat's website" }]
+                 else
+                     Element.none
 color =
     { yellow = rgb255 0xEB 0xCB 0x8B
     , orange = rgb255 0xD0 0x87 0x70

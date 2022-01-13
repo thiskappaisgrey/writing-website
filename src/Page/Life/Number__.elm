@@ -107,7 +107,8 @@ init url sharedModel static =
                     Cmd.none
 
                 Nothing ->
-                    Task.succeed FixUrl |> Task.perform identity
+                    Cmd.none
+                    -- Task.succeed FixUrl |> Task.perform identity
             )
 
 
@@ -205,12 +206,13 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel model static =
-    { title = "Thanawat's website"
+    { title = "Thoughts on life"
     , body =
         [ el [ centerX, Font.size 40, Font.variant Font.smallCaps ] (text "life")
         , renderSlides model static.routeParams
         , slideNavButtons static.routeParams model
         ]
+    , isIndex = False
     }
 
 
@@ -240,7 +242,7 @@ renderSlide slide =
 
 singleSlide : Slide -> Element msg
 singleSlide s =
-    row [ centerX, centerY, paddingXY 30 0 ] [ paragraph [ width (fillPortion 1) ] [ text s.text ], el [ width (fillPortion 1), centerX, Font.center ] (text s.image) ]
+    row [ centerX, centerY  ] [ paragraph [ width (fillPortion 1) ] [ text s.text ], el [ width (fillPortion 1), centerX, Font.center ] (text s.image) ]
 
 
 slideNavButtons : RouteParams -> Model -> Element Msg
@@ -272,7 +274,16 @@ slideNavButtons routeParams model =
         next =
             case routeParams.number of
                 Nothing ->
-                    []
+                    [ button
+                            [ alignRight
+                            , Font.color Shared.color.green
+                            , Element.focused []
+                            , mouseOver [ Font.color Shared.color.purple ]
+                            ]
+                            { label = text "Next"
+                            , onPress = Just (Nav Next)
+                            }
+                        ]
 
                 Just a ->
                     if a == String.fromInt (totalSlides - 1) then
@@ -290,6 +301,6 @@ slideNavButtons routeParams model =
                             }
                         ]
     in
-    row [ width fill, paddingXY 30 30, Font.size 30 ] <|
+    row [ width fill, padding 30 , Font.size 30 ] <|
         prev
             ++ next
