@@ -227,7 +227,7 @@ renderSlides d params =
             renderSlide <| Dict.get (Maybe.withDefault "0" params.number) a
 
         Err err ->
-            Element.text <| Debug.toString err
+            Element.text "there was an error"
 
 
 renderSlide : Maybe Slide -> Element msg
@@ -270,7 +270,7 @@ slideNavButtons routeParams model =
 
         totalSlides =
             Result.withDefault Dict.empty model.slideDict |> Dict.size
-        debug = Debug.log "total slides: " totalSlides
+        -- debug = Debug.log "total slides: " totalSlides
         next =
             case routeParams.number of
                 Nothing ->
