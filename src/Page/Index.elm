@@ -1,6 +1,6 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
-import Animator
+-- import Animator
 import Browser.Navigation
 import DataSource exposing (DataSource)
 import Dict exposing (Dict)
@@ -32,15 +32,12 @@ type alias Id =
     String
 
 
-type alias Model =
-    { buttonStates : Animator.Timeline (Dict Id ButtonState) }
+type alias Model = ()
+
 
 
 type Msg
-    = RuntimeTriggeredAnimationStep Time.Posix
-    | UserHoveredButton Id
-    | UserUnhoveredButton Id
-    | Never
+    =      Never
 
 
 type alias RouteParams =
@@ -69,11 +66,7 @@ init :
     -> StaticPayload Data RouteParams
     -> ( Model, Cmd Msg )
 init _ _ _ =
-    ( { buttonStates =
-            Animator.init <|
-                Dict.fromList [ ( "Uno", Default ), ( "Dos", Default ), ( "Tres", Default ) ]
-      }
-    , Cmd.none
+    (() , Cmd.none
     )
 
 

@@ -1,4 +1,4 @@
-module Page.Life.Number__ exposing (Data, Model, Msg, page)
+module Page.Philosophy.Number__ exposing (Data, Model, Msg, page)
 
 import Browser.Navigation
 import DataSource exposing (DataSource)
@@ -128,7 +128,7 @@ update _ maybeNavigationKey sharedModel static msg model =
                 |> Maybe.map
                     (\navKey ->
                         Browser.Navigation.pushUrl navKey
-                            "/life/0"
+                            "/philosophy/0"
                     )
                 |> Maybe.withDefault Cmd.none
             )
@@ -158,7 +158,7 @@ update _ maybeNavigationKey sharedModel static msg model =
                 |> Maybe.map
                     (\navKey ->
                         Browser.Navigation.pushUrl navKey
-                            ("/life/"
+                            ("/philosophy/"
                                 ++ String.fromInt
                                     nextSlide
                             )

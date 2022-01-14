@@ -2,8 +2,9 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), color, template)
 
 import Browser.Navigation
 import DataSource
-import Element exposing (fill, height, rgb255, spacing, width)
-import Element.Background
+import Element exposing (..)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
 import Html exposing (Html)
 import Pages.Flags
@@ -109,28 +110,47 @@ view sharedData page model toMsg pageView =
                 , height fill
                 , spacing 30
                 , Element.padding 30
-                , Element.Background.color color.nordBackground
+                , Background.color color.nordBackground
                 , Font.color color.white
                 , Font.family
                     [ Font.typeface "Fira Mono"
                     , Font.monospace
                     ]
                 ]
-                ((navBar (not pageView.isIndex)) :: pageView.body)
+            <|
+                [ navBar (not pageView.isIndex) ]
+                    ++ pageView.body
+                    ++ [ row
+                            [ width fill
+                            , padding 10
+
+                            -- , Border.widthEach { top = 1, bottom = 0, left = 0, right = 0 }
+                            -- , Border.color color.blue
+                            ]
+                            [ el [ alignLeft ] <| text "Copyright Thanawat Techaumnuaiwit, 2022"
+                            , link [alpha 0.0, centerX] { url = "/philosophy", label = el [  ] <| text "Hidden Link" }
+                            , newTabLink [ mouseOver [ alpha 0.85 ], alignRight ] { url = "https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest", label = el [ Font.color color.green ] <| text "Source Code" }
+                            ]
+                       ]
     , title = pageView.title
     }
 
+
 navBar : Bool -> Element.Element msg
-navBar showNav = if showNav then
-                     Element.row [] [ Element.link [ Font.size 30 ] { url = "/", label = Element.text "Thanawat's website" }]
-                 else
-                     Element.none
+navBar showNav =
+    if showNav then
+        Element.row [] [ Element.link [ Font.size 20 ] { url = "/", label = Element.text "Thanawat's website" } ]
+
+    else
+        Element.none
+
+
 color =
     { yellow = rgb255 0xEB 0xCB 0x8B
     , orange = rgb255 0xD0 0x87 0x70
-    , green =  rgb255 0xA3 0xBE 0x8C
+    , green = rgb255 0xA3 0xBE 0x8C
     , red = rgb255 0xBF 0x61 0x6A
-    , purple =  rgb255 0xB4 0x8E 0xAD
+    , purple = rgb255 0xB4 0x8E 0xAD
     , nordBackground = rgb255 0x2E 0x34 0x40
     , lightGrey = rgb255 0x43 0x4C 0x5E
     , white = rgb255 0xEC 0xEF 0xF4
