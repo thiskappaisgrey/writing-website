@@ -124,12 +124,8 @@ view sharedData page model toMsg pageView =
                             [ width fill
                             , paddingEach  { top = 20 , right = 0 , bottom = 10 , left = 0}
                             , Font.size 15
-
-                            -- , Border.widthEach { top = 1, bottom = 0, left = 0, right = 0 }
-                            -- , Border.color color.blue
                             ]
                             [ el [ alignLeft ] <| text "Copyright Thanawat Techaumnuaiwit, 2022"
-                            , link [alpha 0.0, centerX] { url = "/philosophy", label = el [  ] <| text "Hidden Link" }
                             , newTabLink [ mouseOver [ alpha 0.85 ], alignRight ] { url = "https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest", label = el [ Font.color color.green ] <| text "Source Code" }
                             ]
                        ] else []
